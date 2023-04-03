@@ -6,6 +6,9 @@ from fastapi import BackgroundTasks
 from schema.PresenceSuite import PresenceSuite
 from tasks.PresenceSuite import PresenceSuiteTask
 
+from schema.Xcally import Xcally
+from tasks.Xcally import XcallyTask
+
 router = APIRouter()
 
 @router.post("/presencesuite-task")
@@ -19,4 +22,11 @@ def get_pubsub_message(presencesuite: PresenceSuite, background_tasks: Backgroun
     #task.task(presencesuite)
     return 'OK'
 
+@router.post("/xcally-task")
+@router.post("/xcally-task/", include_in_schema=False)
+def get_pubsub_message_xcally(xcally: Xcally) -> Any:
+
+    retorno = XcallyTask(xcally)
+
+    return 'OK'
 
