@@ -8,7 +8,7 @@ class Utils:
     def get_token(self):
         # url = "https://geru.3corp.com.br/webchat/rest/api/v1/token"
 
-        # < COMENTADO PARA UTILIZAï¿½ï¿½O NO XCALLY
+        # < COMENTADO PARA UTILIZAÇÃO NO XCALLY
         #url = "https://webchat.tivit.com/webchat/rest/api/v1/token"
         #headers = {
             # 'authorization': "Basic cHJlc2VuY2VhcGk6cHJlc2VuY2VhcGk=",
@@ -20,15 +20,15 @@ class Utils:
         #response = requests.request("GET", url, headers=headers)
         #json_return = json.loads(response.text)
         #return json_return['Data']['Token']
-        # > COMENTADO PARA UTILIZAï¿½ï¿½O NO XCALLY
+        # > COMENTADO PARA UTILIZAÇÃO NO XCALLY
 
-        # Retorna apikey do usuï¿½rio Xcally
+        # Retorna apikey do usuário Xcally
         return "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzc1NDY1NzcsIm5vbmNlIjoiYjVkNDdjNDdlN2M3NDIzZjFmMDgzNWU1YzdiOWQ4ZjIiLCJhdWQiOiI3NThlYzk2My1jY2EzLTljMDMtZDAwMy02NjAxNmEwNjRkOWIiLCJpc3MiOiI3NThlYzk2My1jY2EzLTljMDMtZDAwMy02NjAxNmEwNjRkOWIiLCJzdWIiOiIxIn0.wzLPQhk7AW0gLceuzaSwcCVA81cyQpYlhep6Ug1TUHx2WOckbLGF4uboN-_ZpmLm942U0zXU5TxvZ1NaF6mf8w"
 
     @classmethod
     def creat_session_presense_suite(self, token_id, payload_session):
         # url = "https://geru.3corp.com.br/webchat/rest/api/v1/sessions"
-        # < COMENTADO PARA UTILIZAï¿½ï¿½O NO XCALLY
+        # < COMENTADO PARA UTILIZAÇÃO NO XCALLY
         #url = "https://webchat.tivit.com/webchat/rest/api/v1/sessions"
 
         #payload = {
@@ -47,11 +47,11 @@ class Utils:
         #response = requests.request("POST", url, json=payload, headers=headers)
         #location = response.headers.get('location', 'teste/teste').split('/')[-1]
         #return location
-        # > COMENTADO PARA UTILIZAï¿½ï¿½O NO XCALLY
+        # > COMENTADO PARA UTILIZAÇÃO NO XCALLY
 
         url = "https://tivit.teledatabrasil.com.br/api/openchannel/accounts/1/notify?apikey={}".format(token_id)
 
-        message = "Iniciou uma sessï¿½o... ServiceId: {}, Name: {}, Email: {}, Language: {}, SessionType: {}, RemoteIP: {}".format(payload_session.service_id, payload_session.name, payload_session.email, payload_session.language, payload_session.session_type, payload_session.remote_ip)
+        message = "Iniciou uma sessão... ServiceId: {}, Name: {}, Email: {}, Language: {}, SessionType: {}, RemoteIP: {}".format(payload_session.service_id, payload_session.name, payload_session.email, payload_session.language, payload_session.session_type, payload_session.remote_ip)
 
         payload = {
             "from": payload_session.email,
