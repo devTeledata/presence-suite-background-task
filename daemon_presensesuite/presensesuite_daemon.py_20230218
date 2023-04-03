@@ -27,23 +27,9 @@ class PresenseSuiteDaemon:
 
     def process_streming(self):
         # url = "https://geru.3corp.com.br/webchat/rest/api/v1/sessions/{}/status".format(self.session_presense_suit_id)
-        # < COMENTADO PARA UTILIZAÇÃO NO XCALLY
-        #url = "https://webchat.tivit.com/webchat/rest/api/v1/sessions/{}/status".format(self.session_presense_suit_id)
-        #payload = ""
-        #headers = {"Authorization": "Bearer {}".format(self.token_api_id)}
-        # > COMENTADO PARA UTILIZAÇÃO NO XCALLY
-
-        # AJUSTE PARA UTILIZAÇÃO NO XCALLY
-        #MESSAGES
-        #url = "https://tivit.teledatabrasil.com.br/api/openchannel/interactions/{}/messages?apikey={}".format(self.session_presense_suit_id, self.get_token())
-        #INTERACAO
-        url = "https://tivit.teledatabrasil.com.br/api/openchannel/interactions/{}?apikey={}".format(self.session_presense_suit_id, self.get_token())
-
+        url = "https://webchat.tivit.com/webchat/rest/api/v1/sessions/{}/status".format(self.session_presense_suit_id)
         payload = ""
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/json"
-        }
+        headers = {"Authorization": "Bearer {}".format(self.token_api_id)}
 
         state = 0
 
@@ -109,24 +95,9 @@ class PresenseSuiteDaemon:
 
     def get_variables(self, r, state):
         res_json = json.loads(r.text)
-        # > COMENTADO PARA UTILIZAÇÃO NO XCALLY
-        #state = res_json["Data"]["State"]
-        #AgentNickName = res_json["Data"]["AgentNickName"]
-        # > COMENTADO PARA UTILIZAÇÃO NO XCALLY
-
-        #Se estiver encerrada
-        if res_json["closed"]:
-            state = 6
-        #Se não tiver atendente
-        elif res_json["UserId"] is None:
-            state = 2
-        #Se tiver atendente
-        else:
-            state = 1
-
-        AgentNickName = res_json["UserId"]
+        state = res_json["Data"]["State"]
+        AgentNickName = res_json["Data"]["AgentNickName"]
         return AgentNickName, res_json, state
-
     # Mensagem caso o atendente encerre a sessão
     def set_operator_request_false(self, message="Sessão com atendente foi encerrada!"):
         space_info = self._db.collection(f'spaces').document(self.space_id)
@@ -166,47 +137,26 @@ class PresenseSuiteDaemon:
     def send_message_chat_to_operator(self, message, session):
 
         # url = "https://geru.3corp.com.br/webchat/rest/api/v1/sessions/{}/text".format(session)
-        # url = "https://webchat.tivit.com/webchat/rest/api/v1/sessions/{}/text".format(session)
-        url = "https://tivit.teledatabrasil.com.br/api/openchannel/accounts/1/notify?apikey=".format(self.get_token())
-        url_teste = "http://sssaude.teledatabrasil.com.br:3333/post-teste-recebe.php"
+        url = "https://webchat.tivit.com/webchat/rest/api/v1/sessions/{}/text".format(session)
 
         headers = {
-            "Accept": "application/json",
             "Content-Type": "application/json",
-            # "Authorization": "Bearer {}".format(self.get_token())
+            "Authorization": "Bearer {}".format(self.get_token())
         }
 
-        # Formato de dados recebido pelo Xcally
-        params = {
-            "from": session,
-            "body": message,
-            "mapKey": "email" # aqui pode mudar, dependendo do que foi setado no Openchannel
-        }
-
-        #response = requests.request("POST", url, json=message, headers=headers)
-        response = requests.request("POST", url, json=params, headers=headers)
-        print(response)
-        print(response.text)
-
-        response = requests.request("POST", url_teste, json=params, headers=headers)
+        response = requests.request("POST", url, json=message, headers=headers)
         print(response)
         print(response.text)
 
     def get_token(self):
         # url = "https://geru.3corp.com.br/webchat/rest/api/v1/token"
+        url = "https://webchat.tivit.com/webchat/rest/api/v1/token"
+        headers = {
+            'authorization': "Basic cHJlc2VuY2VhcGk6cHJlc2VuY2VhcGk=",
+            'cache-control': "no-cache",
+            'postman-token': "6dff3322-923b-7da2-4692-41fdf9a91f4b"
+        }
 
-        # < COMENTADO PARA UTILIZAÇÃO NO XCALLY
-        #url = "https://webchat.tivit.com/webchat/rest/api/v1/token"
-        #headers = {
-            #'authorization': "Basic cHJlc2VuY2VhcGk6cHJlc2VuY2VhcGk=",
-            #'cache-control': "no-cache",
-            #'postman-token': "6dff3322-923b-7da2-4692-41fdf9a91f4b"
-        #}
-
-        #response = requests.request("GET", url, headers=headers)
-        #json_return = jsons.loads(response.text)
-        #return json_return['Data']['Token']
-        # > COMENTADO PARA UTILIZAÇÃO NO XCALLY
-
-        # Retorna apikey do usuário Xcally
-        return "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2Nzc1NDY1NzcsIm5vbmNlIjoiYjVkNDdjNDdlN2M3NDIzZjFmMDgzNWU1YzdiOWQ4ZjIiLCJhdWQiOiI3NThlYzk2My1jY2EzLTljMDMtZDAwMy02NjAxNmEwNjRkOWIiLCJpc3MiOiI3NThlYzk2My1jY2EzLTljMDMtZDAwMy02NjAxNmEwNjRkOWIiLCJzdWIiOiIxIn0.wzLPQhk7AW0gLceuzaSwcCVA81cyQpYlhep6Ug1TUHx2WOckbLGF4uboN-_ZpmLm942U0zXU5TxvZ1NaF6mf8w"
+        response = requests.request("GET", url, headers=headers)
+        json_return = jsons.loads(response.text)
+        return json_return['Data']['Token']
