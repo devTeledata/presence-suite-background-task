@@ -1,0 +1,29 @@
+steps:
+  # Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/sas-enduser-chat-ti/presence-suite-backfroudtask:latest', '.']
+
+  # Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/sas-enduser-chat-ti/presence-suite-backfroudtask:latest']
+
+  # Deploy container image to Cloud Run
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: [
+    'beta',
+    'run',
+    'deploy',
+    'presence-suite-backfroudtask',
+    '--image',
+    'gcr.io/sas-enduser-chat-ti/presence-suite-backfroudtask:latest',
+    '--region',
+    'us-east1',
+    '--service-account',
+    'presence-suite-backfroudtask@sas-enduser-chat-ti.iam.gserviceaccount.com',
+    '--execution-environment',
+    'gen2',
+    '--memory',
+    '1Gi',
+    '--cpu',
+    '2'
+  ]
